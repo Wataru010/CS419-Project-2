@@ -42,7 +42,7 @@ try:
             log.write(new_log + "\n")
             log.close()
 
-    except FileExistsError: # only log.txt exist
+    except FileNotFoundError: # only log.txt exist
         print("loghead.txt is missing!")
         sys.exit()
 
