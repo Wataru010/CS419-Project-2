@@ -1,0 +1,18 @@
+log exist & loghead exist
+    log empty (check)
+        write log str with "begin" and override loghead head pointer
+    loghead empty (check)
+        error message empty file
+    both empty (same as log empty) (check)
+        write both and with "begin"
+    both not empty (check)
+        write new log str according to head pointer
+
+log exist & loghead not exist (check)
+    error message missing file
+
+log not exist & loghead exist (check)
+    create log with "begin" and override loghead head pointer
+
+both not exist (check)
+    create both and with "begin"
