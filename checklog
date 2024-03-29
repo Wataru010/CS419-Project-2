@@ -1,0 +1,71 @@
+#!/usr/bin/python3
+
+import sys, os
+import hashlib
+import base64
+
+args = sys.argv
+if len(args) > 1: # this program doesn't need any command line argument from user
+    print("failed: too many argumens!")
+    sys.exit(1)
+
+try: # check log.txt existence
+    log = open("log.txt", "r")
+except FileNotFoundError:
+    print("failed: log.txt does not exist.")
+    sys.exit(1)
+
+try: # check loghead.txt existence
+    loghead = open("loghead.txt", "r")
+except FileNotFoundError:
+    print("failed: loghead.txt does not exist.")
+    sys.exit(1)
+
+# verify the first line of the file
+log_str = log.readline().strip()
+num_of_line = 1
+hash_str = hashlib.sha256(log_str.encode("ascii")).digest()
+base64_str = base64.b64encode(hash_str).decode("ascii")
+
+if len(log_str) != 0:
+    log_str_items = log_str.split()
+    if log_str_items[3] != "begin": # check first line hash value is not begin with "begin"
+        print("failed: hash value of the first line is not \"begin\" / missing starting line.")
+        sys.exit(1)
+else: 
+    if os.path.getsize("log.txt") == 0: # no content in log.txt
+        print("failed: log.txt is empty.")
+        sys.exit(1)
+    else: # there is content in log.txt, but the first line is missing
+        print("failed: missing starting line.")
+        sys.exit(1) 
+
+# check log string line by line
+while True:
+    log_str = log.readline().strip()
+
+    # 
+    if len(log_str) == 0:
+        break
+
+    log_str_items = log_str.split()
+    if log_str_items[3] != base64_str: # check if the hash value of n-1 line string equal the hash value store in n line string
+        print(f"failed: at line {num_of_line} has corruption.")
+        sys.exit(1)
+
+    # move on to next line
+    num_of_line += 1
+    hash_str = hashlib.sha256(log_str.encode("ascii")).digest()
+    base64_str = base64.b64encode(hash_str).decode("ascii")
+
+# read loghead
+hash_head_pointer = loghead.readline().strip()
+
+# and check loghead with the hash of last line
+if hash_head_pointer == base64_str:
+    print("valid")
+else: 
+    # any changes in last line of the log.txt or the loghead.txt will tell that the last line (with its line number) has corruption
+    # or any line is missing also trigger this, telling the user that something wrong with the preceding line of the missing line
+    print(f"failed: at line {num_of_line} has corruption / missing a line {num_of_line+1} if line {num_of_line} is the last line.")
+    sys.exit(1)
