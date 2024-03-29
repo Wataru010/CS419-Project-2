@@ -20,11 +20,8 @@ try:
     log = open("log.txt")
     log.close()
 
-    try: # both log.txt and loghead.txt exist
-        if os.path.getsize("loghead.txt") == 0:
-            print("loghead.txt is empty!")
-            sys.exit()
-        else:
+    try: 
+        if os.path.getsize("log.txt") != 0 and os.path.getsize("loghead.txt") != 0: # both not empty, write new log str according to head pointer
             loghead = open("loghead.txt", "r")
             hash_head_pointer = loghead.readline()
             hash_head_pointer = hash_head_pointer.strip()
@@ -41,13 +38,44 @@ try:
             log = open("log.txt", "a")
             log.write(new_log + "\n")
             log.close()
+        elif os.path.getsize("log.txt") == 0 and os.path.getsize("loghead.txt") != 0: # only log empty, write log str with "begin" and override loghead head pointer
+            date_time = str(datetime.now())
+            new_log = "".join(list(date_time)[:19]) + " - " + "begin" + " " + log_string.replace('\n', ' ')
+
+            loghead = open("loghead.txt", "w")
+            hash_str = hashlib.sha256(new_log.encode("ascii")).hexdigest()
+            base64_str = base64.b64encode(hash_str.encode("ascii")).decode("ascii")
+            loghead.write(base64_str)
+            loghead.close()
+
+            log = open("log.txt", "a")
+            log.write(new_log + "\n")
+            log.close()
+        elif os.path.getsize("loghead.txt") == 0 and os.path.getsize("log.txt") != 0: # only loghead empty, error message empty file
+            print("loghead.txt is empty!")
+            sys.exit()
+        else: # both log and loghead are empty, write new log str according to head pointer
+            date_time = str(datetime.now())
+            new_log = "".join(list(date_time)[:19]) + " - " + "begin" + " " + log_string.replace('\n', ' ')
+
+            loghead = open("loghead.txt", "w")
+            hash_str = hashlib.sha256(new_log.encode("ascii")).hexdigest()
+            base64_str = base64.b64encode(hash_str.encode("ascii")).decode("ascii")
+            loghead.write(base64_str)
+            loghead.close()
+
+            log = open("log.txt", "a")
+            log.write(new_log + "\n")
+            log.close()
+            
 
     except FileNotFoundError: # only log.txt exist
         print("loghead.txt is missing!")
         sys.exit()
 
 except FileNotFoundError:
-    # try: # only loghead.txt exist
+    # only loghead.txt exist: create log with "begin" and override loghead head pointer
+    # neither log.txt and loghead.txt exist: create both and with "begin"
 
     date_time = str(datetime.now())
     new_log = "".join(list(date_time)[:19]) + " - " + "begin" + " " + log_string.replace('\n', ' ')
@@ -58,9 +86,6 @@ except FileNotFoundError:
     loghead.write(base64_str)
     loghead.close()
 
-    log = open("log.txt", "a")
+    log = open("log.txt", "w")
     log.write(new_log + "\n")
     log.close()
-
-    # except FileExistsError: # neither log.txt and loghead.txt exist
-    #     print()
