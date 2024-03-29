@@ -30,8 +30,8 @@ try:
             loghead.close()
             
             loghead = open("loghead.txt", "w")
-            hash_str = hashlib.sha256(new_log.encode("ascii")).hexdigest()
-            base64_str = base64.b64encode(hash_str.encode("ascii")).decode("ascii")
+            hash_str = hashlib.sha256(new_log.encode("ascii")).digest()
+            base64_str = base64.b64encode(hash_str).decode("ascii")
             loghead.write(base64_str)
             loghead.close()
 
@@ -43,8 +43,8 @@ try:
             new_log = "".join(list(date_time)[:19]) + " - " + "begin" + " " + log_string.replace('\n', ' ')
 
             loghead = open("loghead.txt", "w")
-            hash_str = hashlib.sha256(new_log.encode("ascii")).hexdigest()
-            base64_str = base64.b64encode(hash_str.encode("ascii")).decode("ascii")
+            hash_str = hashlib.sha256(new_log.encode("ascii")).digest()
+            base64_str = base64.b64encode(hash_str).decode("ascii")
             loghead.write(base64_str)
             loghead.close()
 
@@ -59,8 +59,8 @@ try:
             new_log = "".join(list(date_time)[:19]) + " - " + "begin" + " " + log_string.replace('\n', ' ')
 
             loghead = open("loghead.txt", "w")
-            hash_str = hashlib.sha256(new_log.encode("ascii")).hexdigest()
-            base64_str = base64.b64encode(hash_str.encode("ascii")).decode("ascii")
+            hash_str = hashlib.sha256(new_log.encode("ascii")).digest()
+            base64_str = base64.b64encode(hash_str).decode("ascii")
             loghead.write(base64_str)
             loghead.close()
 
@@ -81,8 +81,8 @@ except FileNotFoundError:
     new_log = "".join(list(date_time)[:19]) + " - " + "begin" + " " + log_string.replace('\n', ' ')
 
     loghead = open("loghead.txt", "w")
-    hash_str = hashlib.sha256(new_log.encode("ascii")).hexdigest()
-    base64_str = base64.b64encode(hash_str.encode("ascii")).decode("ascii")
+    hash_str = hashlib.sha256(new_log.encode("ascii")).digest()
+    base64_str = base64.b64encode(hash_str).decode("ascii")
     loghead.write(base64_str)
     loghead.close()
 
