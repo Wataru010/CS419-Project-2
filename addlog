@@ -8,13 +8,13 @@ import hashlib
 args = sys.argv
 
 if len(args) < 2:
-    print("Supply an argument for log string!")
+    print("failed: supply an argument for log string!")
     sys.exit(1)
 elif len(args) > 2:
-    print("Too many arguments!")
+    print("failed: too many arguments!")
     sys.exit(1)
 
-log_string = args[1]
+log_string = args[1].rstrip()
 
 try:
     log = open("log.txt")
@@ -38,7 +38,12 @@ try:
             log = open("log.txt", "a")
             log.write(new_log + "\n")
             log.close()
+
+            print("succeed: a log has addedd log.txt.")
+            
         elif os.path.getsize("log.txt") == 0 and os.path.getsize("loghead.txt") != 0: # only log empty, write log str with "begin" and override loghead head pointer
+            print("warning: the log.txt file is empty, an initial log will be added to log.txt and the loghead.txt will be overwrite with new hashvalue.")
+            
             date_time = str(datetime.now())
             new_log = "".join(list(date_time)[:19]) + " - " + "begin" + " " + log_string.replace('\n', ' ')
 
@@ -51,10 +56,15 @@ try:
             log = open("log.txt", "a")
             log.write(new_log + "\n")
             log.close()
+
+            print("succeed: a log has addedd log.txt.")
+
         elif os.path.getsize("loghead.txt") == 0 and os.path.getsize("log.txt") != 0: # only loghead empty, error message empty file
-            print("loghead.txt is empty!")
+            print("failed: loghead.txt is empty!")
             sys.exit(1)
         else: # both log and loghead are empty, write new log str according to head pointer
+            print("warning: both log.txt and loghead.txt is empty, an initial log will be added to log.txt and an initial hashvalue will be added to loghead.txt.")
+
             date_time = str(datetime.now())
             new_log = "".join(list(date_time)[:19]) + " - " + "begin" + " " + log_string.replace('\n', ' ')
 
@@ -67,15 +77,23 @@ try:
             log = open("log.txt", "a")
             log.write(new_log + "\n")
             log.close()
-            
 
+            print("succeed: a log has addedd log.txt.")
+            
     except FileNotFoundError: # only log.txt exist
-        print("loghead.txt is missing!")
+        print("failed: loghead.txt is missing!")
         sys.exit(1)
 
 except FileNotFoundError:
     # only loghead.txt exist: create log with "begin" and override loghead head pointer
     # neither log.txt and loghead.txt exist: create both and with "begin"
+    print("warning: log.txt doesn't exist, a new log.txt will be created and add an initial log to it.")
+    print("warning: depends on existence of loghead.txt, a new hashvalue will overwrite the old hashvalue or will add to it(exist or not exist)")
+
+    if not os.path.exists("loghead.txt"):
+        print("warning: loghead.txt doesn't exist, a new log.txt will be created and a new hashvalue will be added to it.")
+    else:
+        print("warning: loghead.txt exist, a new hashvalue will overwrite the old hashvalue.")
 
     date_time = str(datetime.now())
     new_log = "".join(list(date_time)[:19]) + " - " + "begin" + " " + log_string.replace('\n', ' ')
@@ -89,3 +107,5 @@ except FileNotFoundError:
     log = open("log.txt", "w")
     log.write(new_log + "\n")
     log.close()
+
+    print("succeed: a log has addedd log.txt.")
