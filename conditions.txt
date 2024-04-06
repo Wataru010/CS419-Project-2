@@ -1,3 +1,5 @@
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+File Check for addlog:
 log exist & loghead exist
     log empty (check)
         write log str with "begin" and override loghead head pointer
@@ -16,3 +18,32 @@ log not exist & loghead exist (check)
 
 both not exist (check)
     create both and with "begin"
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Tests for addlog:
+Create loghead.txt and log.txt when they don’t exist.
+
+Print a message if no arguments or more than 1 argument are present and exit gracefully.
+
+Any newlines in the command-line argument should be converted to spaces.
+
+An empty string can be accepted as valid log entry.
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Tests for checklog:
+Print an error message if any command-line arguments are provided and exit.
+
+Detect that loghead.txt is missing.
+
+Detect that log.txt is missing.
+
+Print a valid message if log file validation succeeds.
+
+Delete a line of the file. A failed message should be generated, identifying the preceding line number (line numbers start with 1 by convention). 
+
+Modify the text or timestamp of a line of the file. A failed message should be generated, identifying the line number of the modified line. 
+
+Modify a hash in a line of the file. A failed message should be generated, identifying the line number of the preceding line. 
+
+Delete the first line of the file. Validation should fail, identifying the lack of a starting line. 
+
+Modify the head pointer file. Validation should fail on the last line of the file.
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
