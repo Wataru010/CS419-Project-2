@@ -13,16 +13,24 @@ try: # check log.txt existence
     log = open("log.txt", "r")
 except FileNotFoundError:
     print("failed: log.txt does not exist.")
+
+    try: # check loghead.txt existence
+        loghead = open("loghead.txt", "r")
+    except FileNotFoundError:
+        print("failed: loghead.txt does not exist.")
+        sys.exit(1)
+
     sys.exit(1)
 
 try: # check loghead.txt existence
     loghead = open("loghead.txt", "r")
 except FileNotFoundError:
     print("failed: loghead.txt does not exist.")
+    log.close() # close log file for security
     sys.exit(1)
 
 # verify the first line of the file
-log_str = log.readline().strip()
+log_str = log.readline().strip("\n")
 num_of_line = 1
 hash_str = hashlib.sha256(log_str.encode("ascii")).digest()
 base64_str = base64.b64encode(hash_str).decode("ascii")
@@ -42,15 +50,18 @@ else:
 
 # check log string line by line
 while True:
-    log_str = log.readline().strip()
+    log_str = log.readline().strip("\n")
 
-    # 
+    # EOF / missing line
     if len(log_str) == 0:
         break
 
     log_str_items = log_str.split()
     if log_str_items[3] != base64_str: # check if the hash value of n-1 line string equal the hash value store in n line string
         print(f"failed: at line {num_of_line} has corruption.")
+        # close both files before exiting the program
+        log.close()
+        loghead.close()
         sys.exit(1)
 
     # move on to next line
@@ -68,4 +79,12 @@ else:
     # any changes in last line of the log.txt or the loghead.txt will tell that the last line (with its line number) has corruption
     # or any line is missing also trigger this, telling the user that something wrong with the preceding line of the missing line
     print(f"failed: at line {num_of_line} has corruption / missing a line {num_of_line+1} if line {num_of_line} is the last line.")
+    
+    # close both files before exiting the program
+    log.close()
+    loghead.close()
     sys.exit(1)
+
+# close both files when checking is finished
+log.close()
+loghead.close()
