@@ -14,7 +14,7 @@ elif len(args) > 2:
     print("failed: too many arguments!")
     sys.exit(1)
 
-log_string = args[1].rstrip()
+log_string = args[1]
 
 try:
     log = open("log.txt")
@@ -88,7 +88,7 @@ except FileNotFoundError:
     # only loghead.txt exist: create log with "begin" and override loghead head pointer
     # neither log.txt and loghead.txt exist: create both and with "begin"
     print("warning: log.txt doesn't exist, a new log.txt will be created and add an initial log to it.")
-    print("warning: depends on existence of loghead.txt, a new hashvalue will overwrite the old hashvalue or will add to it(exist or not exist)")
+    print("warning: depends on existence of loghead.txt, a new hashvalue will overwrite the old hashvalue or will add to it(exist or not exist).")
 
     if not os.path.exists("loghead.txt"):
         print("warning: loghead.txt doesn't exist, a new log.txt will be created and a new hashvalue will be added to it.")
