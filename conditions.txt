@@ -20,30 +20,30 @@ both not exist (check)
     create both and with "begin"
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 Tests for addlog:
-Create loghead.txt and log.txt when they don’t exist.
+Create loghead.txt and log.txt when they don’t exist. (check)
 
-Print a message if no arguments or more than 1 argument are present and exit gracefully.
+Print a message if no arguments or more than 1 argument are present and exit gracefully. (check)
 
-Any newlines in the command-line argument should be converted to spaces.
+Any newlines in the command-line argument should be converted to spaces. (check)
 
-An empty string can be accepted as valid log entry.
+An empty string can be accepted as valid log entry. (check)
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 Tests for checklog:
-Print an error message if any command-line arguments are provided and exit.
+Print an error message if any command-line arguments are provided and exit. (check)
 
-Detect that loghead.txt is missing.
+Detect that loghead.txt is missing. (check)
 
-Detect that log.txt is missing.
+Detect that log.txt is missing. (check)
 
-Print a valid message if log file validation succeeds.
+Print a valid message if log file validation succeeds. (check)
 
-Delete a line of the file. A failed message should be generated, identifying the preceding line number (line numbers start with 1 by convention). 
+Delete a line of the file. A failed message should be generated, identifying the preceding line number (line numbers start with 1 by convention). (check)
 
-Modify the text or timestamp of a line of the file. A failed message should be generated, identifying the line number of the modified line. 
+Modify the text or timestamp of a line of the file. A failed message should be generated, identifying the line number of the modified line. (check)
 
-Modify a hash in a line of the file. A failed message should be generated, identifying the line number of the preceding line. 
+Modify a hash in a line of the file. A failed message should be generated, identifying the line number of the preceding line. (check)
 
-Delete the first line of the file. Validation should fail, identifying the lack of a starting line. 
+Delete the first line of the file. Validation should fail, identifying the lack of a starting line. (check)
 
-Modify the head pointer file. Validation should fail on the last line of the file.
+Modify the head pointer file. Validation should fail on the last line of the file. (check)
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------
